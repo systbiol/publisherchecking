@@ -1,0 +1,52 @@
+---
+title: "Publisher Checking"
+author: "Brian C. O'Meara"
+date: "5/29/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(xml2)
+library(rvest)
+```
+
+## Automatic checks
+
+These are some scripts to check Oxford performance for Systematic Biology. Red=*Systematic Biology*, Orange=other Oxford journals, Blue=other publishers.
+
+```{r speed, echo=FALSE}
+syst.bio.dois <- c("http://dx.doi.org/10.1093/sysbio/syp074", "http://dx.doi.org/10.1080/10635150390235520", "http://dx.doi.org/10.1093/sysbio/42.3.265")
+other.oxford.dois <- c("http://dx.doi.org/10.1093/molbev/msn083", "http://dx.doi.org/10.1093/nar/gkp370")
+other.publisher.dois <- c("http://dx.doi.org/10.2307/2291091", "http://dx.doi.org/10.1086/590395", "http://dx.doi.org/10.1086/418300", "http://dx.doi.org/10.1086/382734")
+all.dois <- c(syst.bio.dois, other.oxford.dois, other.publisher.dois)
+speeds <- rep(NA, length(all.dois))
+colors <- c(rep("red", length(syst.bio.dois)), rep("orange", length(other.oxford.dois)), rep("blue", length(other.publisher.dois)))
+for (i in sequence(length(all.dois))) {
+  try(speeds[i] <- system.time(xml2::read_html(all.dois[i]))['elapsed'] )
+}
+barplot(speeds, col=colors)
+```
+
+
+
+```{r, echo=FALSE}
+advanced.feed.valid <- !grepl("does not validate", rvest::html_text(xml2::read_html("https://www.feedvalidator.org/check.cgi?url=https%3A%2F%2Facademic.oup.com%2Frss%2Fsite_5349%2FadvanceAccess_3215.xml")))
+current.feed.valid <- !grepl("does not validate", rvest::html_text(xml2::read_html("https://www.feedvalidator.org/check.cgi?url=https%3A%2F%2Facademic.oup.com%2Frss%2Fsite_5349%2F3215.xml")))
+```
+
+Advanced RSS feed valid:  **`r ifelse(advanced.feed.valid, "yes", "no")`**.
+
+Current issue RSS feed valid: **`r ifelse(current.feed.valid, "yes", "no")`**.
+
+
+## Other things to check manually:
+
+https://academic.oup.com/sysbio/article/66/3/A3/3737781/Announcements: 2014 Publisher's award used to render as: `$\$$ 500 to each winner and a 2-year free subscription to Systematic Biology.` [note the dollar signs]. Does it still?
+
+https://doi.org/10.1080/10635150701701083: Make sure single author in both paper and in downloads. (AE sometimes listed as coauthor).
+
+## ToDo:
+
+Add all past issues (OA, DOIs going to wrong journal, etc.)
+
