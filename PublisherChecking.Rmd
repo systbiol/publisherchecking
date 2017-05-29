@@ -1,8 +1,10 @@
 ---
 title: "Publisher Checking"
 author: "Brian C. O'Meara"
-date: "5/29/2017"
-output: html_document
+date: "`r format(Sys.Date())`"
+output:  
+  html_document:  
+    keep_md: true  
 ---
 
 ```{r setup, include=FALSE}
