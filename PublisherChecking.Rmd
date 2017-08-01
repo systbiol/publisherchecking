@@ -1,10 +1,11 @@
 ---
 title: "Publisher Checking"
 author: "Brian C. O'Meara"
-date: "`r format(Sys.Date())`"
-output:  
-  html_document:  
-    keep_md: true  
+date: '`r format(Sys.Date())`'
+output:
+  pdf_document: default
+  html_document:
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -24,10 +25,16 @@ other.publisher.dois <- c("http://dx.doi.org/10.2307/2291091", "http://dx.doi.or
 all.dois <- c(syst.bio.dois, other.oxford.dois, other.publisher.dois)
 speeds <- rep(NA, length(all.dois))
 colors <- c(rep("red", length(syst.bio.dois)), rep("orange", length(other.oxford.dois)), rep("blue", length(other.publisher.dois)))
-for (i in sequence(length(all.dois))) {
-  try(speeds[i] <- system.time(xml2::read_html(all.dois[i]))['elapsed'] )
+n.speed.rep=5
+speeds.all <- matrix(nrow=n.speed.rep, ncol=length(speeds))
+for (speed.rep in sequence(n.speed.rep)) {
+    for (i in sequence(length(all.dois))) {
+      try(speeds[i] <- system.time(xml2::read_html(all.dois[i]))['elapsed'] )
+    }
+    speeds.all[speed.rep,] <- speeds
+    Sys.sleep(30)
 }
-barplot(speeds, col=colors)
+barplot(apply(speeds.all, 2, median), col=colors, ylab="seconds")
 ```
 
 
