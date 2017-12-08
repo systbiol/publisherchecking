@@ -1,6 +1,12 @@
-# Publisher Checking
-Brian C. O'Meara  
-`r format(Sys.Date())`  
+---
+title: "Publisher Checking"
+author: "Brian C. O'Meara"
+date: '2017-12-08'
+output:
+  pdf_document: default
+  html_document:
+    keep_md: yes
+---
 
 
 
@@ -8,7 +14,7 @@ Brian C. O'Meara
 
 These are some scripts to check Oxford performance for Systematic Biology. Red=*Systematic Biology*, Orange=other Oxford journals, Blue=other publishers.
 
-![](PublisherChecking_files/figure-html/speed-1.png)<!-- -->
+![plot of chunk speed](figure/speed-1.png)
 
 
 
